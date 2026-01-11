@@ -18,7 +18,7 @@ async function getRegionMap(cacheId: string) {
     regionMapUpdated < Date.now() - 3600 * 1000
   ) {
     // Fetch regions from Medusa. We can't use the JS client here because middleware is running on Edge and the client needs a Node environment.
-    const { regions } = await fetch(`${BACKEND_URL}/store/regions`, {
+    let { regions } = await fetch(`${BACKEND_URL}/store/regions`, {
       headers: {
         "x-publishable-api-key": PUBLISHABLE_API_KEY!,
       },
@@ -37,9 +37,17 @@ async function getRegionMap(cacheId: string) {
     })
 
     if (!regions?.length) {
-      throw new Error(
-        "No regions found. Please set up regions in your Medusa Admin."
-      )
+      // Fallback for when no regions are configured
+      console.warn("No regions found in backend. Using fallback default region.")
+      regions = [{
+        id: "reg_fallback",
+        name: "Default Region",
+        currency_code: "usd",
+        countries: [{ iso_2: "us", display_name: "United States" }],
+        automatic_taxes: true,
+        tax_provider_id: null,
+        payment_providers: []
+      }]
     }
 
     // Create a map of country codes to regions.

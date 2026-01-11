@@ -137,14 +137,14 @@ const ProductVariantsTable = ({
       <Button
         onClick={handleAddToCart}
         variant="primary"
-        className="w-full h-10"
+        className="w-full h-10 !bg-[rgb(249,115,22)] hover:!bg-[rgb(249,115,22)]/90 !text-white"
         isLoading={isAdding}
         disabled={totalQuantity === 0}
         data-testid="add-product-button"
       >
         <ShoppingBag
           className="text-white"
-          fill={totalQuantity === 0 ? "none" : "#fff"}
+          fill={totalQuantity === 0 ? "#fff" : "#fff"}
         />
         {totalQuantity === 0
           ? "Choose product variant(s) above"
@@ -153,5 +153,6 @@ const ProductVariantsTable = ({
     </div>
   )
 }
+
 
 export default ProductVariantsTable

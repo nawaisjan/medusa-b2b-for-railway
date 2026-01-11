@@ -104,11 +104,9 @@ const CartDrawer = ({
   }, [pathname])
 
   const checkoutStep = cart ? getCheckoutStep(cart) : undefined
-  const checkoutPath = customer
-    ? checkoutStep
-      ? `/checkout?step=${checkoutStep}`
-      : "/checkout"
-    : "/account"
+  const checkoutPath = checkoutStep
+    ? `/checkout?step=${checkoutStep}`
+    : "/checkout"
 
   return (
     <>
@@ -128,12 +126,12 @@ const CartDrawer = ({
             <span className="text-sm font-normal hidden small:inline-block">
               {cart && items && items.length > 0
                 ? convertToLocale({
-                    amount: subtotal,
-                    currency_code: cart.currency_code,
-                  })
+                  amount: subtotal,
+                  currency_code: cart.currency_code,
+                })
                 : "Cart"}
             </span>
-            <div className="bg-blue-500 text-white text-xs px-1.5 py-px rounded-full">
+            <div className="bg-orange-500 text-white text-xs px-1.5 py-px rounded-full">
               {totalItems}
             </div>
           </button>
@@ -201,11 +199,9 @@ const CartDrawer = ({
                         disabled={totalItems === 0 || spendLimitExceeded}
                       >
                         <LockClosedSolidMini />
-                        {customer
-                          ? spendLimitExceeded
-                            ? "Spending Limit Exceeded"
-                            : "Secure Checkout"
-                          : "Log in to checkout"}
+                        {spendLimitExceeded
+                          ? "Spending Limit Exceeded"
+                          : "Secure Checkout"}
                       </Button>
                     </LocalizedClientLink>
                     {spendLimitExceeded && (

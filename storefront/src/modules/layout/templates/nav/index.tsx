@@ -43,7 +43,7 @@ export async function NavigationHeader() {
       </div>
 
       {/* ================= HEADER ================= */}
-      <header className="bg-gray-50 border-b border-gray-200">
+      <header className="bg-white border-b border-gray-200">
         {/* ============ MOBILE HEADER ============ */}
         <div className="flex justify-between items-center py-3 px-4 md:hidden bg-gray-50">
           <LocalizedClientLink href="/" className="inline-block">
@@ -82,7 +82,7 @@ export async function NavigationHeader() {
             <LocalizedClientLink href="/" className="inline-block">
               <img
                 src="/logo.png"
-                alt="Ali2BD"
+                alt="afghanchinashoppingcenter"
                 className="h-16 w-auto object-contain"
               />
             </LocalizedClientLink>
@@ -101,7 +101,7 @@ export async function NavigationHeader() {
 
             <RequestQuotePrompt>
               <button className="flex gap-1.5 items-center rounded-2xl bg-none shadow-none border-none hover:bg-neutral-100 px-2 py-1">
-                <FilePlus />
+                <FilePlus className="text-orange-500" />
                 <span className="hidden small:inline-block">Quote</span>
               </button>
             </RequestQuotePrompt>

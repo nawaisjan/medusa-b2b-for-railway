@@ -41,15 +41,15 @@ export type AddToCartEventPayload = {
 
 const CartContext = createContext<
   | {
-      cart: B2BCart | null
-      handleDeleteItem: (lineItem: string) => Promise<void>
-      handleUpdateCartQuantity: (
-        lineItem: string,
-        newQuantity: number
-      ) => Promise<void>
-      handleEmptyCart: () => Promise<void>
-      isUpdatingCart: boolean
-    }
+    cart: B2BCart | null
+    handleDeleteItem: (lineItem: string) => Promise<void>
+    handleUpdateCartQuantity: (
+      lineItem: string,
+      newQuantity: number
+    ) => Promise<void>
+    handleEmptyCart: () => Promise<void>
+    isUpdatingCart: boolean
+  }
   | undefined
 >(undefined)
 
@@ -177,12 +177,12 @@ export function CartProvider({
         })
       })
     },
-    [setOptimisticCart]
+    [setOptimisticCart, cart, countryCode]
   )
 
   useEffect(() => {
     addToCartEventBus.registerCartAddHandler(handleOptimisticAddToCart)
-  }, [handleOptimisticAddToCart])
+  }, [handleOptimisticAddToCart, cart, countryCode])
 
   const handleDeleteItem = async (lineItem: string) => {
     const item = optimisticCart?.items?.find(({ id }) => id === lineItem)

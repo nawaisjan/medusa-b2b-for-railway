@@ -86,9 +86,11 @@ export async function getOrSetCart(countryCode: string) {
   }
 
   if (cart && cart?.region_id !== region.id) {
+    console.log(`[getOrSetCart] Updating cart region from ${cart.region_id} to ${region.id}`)
     await sdk.store.cart.update(cart.id, { region_id: region.id }, {}, headers)
     const cartCacheTag = await getCacheTag("carts")
     revalidateTag(cartCacheTag)
+    cart = await retrieveCart() // Refresh cart
   }
 
   return cart
@@ -189,7 +191,15 @@ export async function addToCartBulk({
       body: JSON.stringify({ line_items: lineItems }),
     }
   )
-    .then(async () => {
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error(`Failed to add items to cart: ${response.statusText}`)
+      }
+
+      // Wait a bit to ensure server has committed the transaction
+      // before revalidating the cache (which triggers a refetch)
+      await new Promise(resolve => setTimeout(resolve, 500))
+
       const fullfillmentCacheTag = await getCacheTag("fulfillment")
       revalidateTag(fullfillmentCacheTag)
       const cartCacheTag = await getCacheTag("carts")
@@ -506,8 +516,7 @@ export async function placeOrder(
   await removeCartId()
 
   redirect(
-    `/${response.order.shipping_address?.country_code?.toLowerCase()}/order/confirmed/${
-      response.order.id
+    `/${response.order.shipping_address?.country_code?.toLowerCase()}/order/confirmed/${response.order.id
     }`
   )
 }
